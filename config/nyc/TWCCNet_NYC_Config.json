@@ -6,12 +6,12 @@
     "seed": 2019,
     "data_type": "nyc",
 
-    "all_data_filename": "drive/MyDrive/accident/TWCCNet/data/nyc/all_data.pkl",
-    "mask_filename": "drive/MyDrive/accident/TWCCNet/data/nyc/risk_mask.pkl",
-    "road_adj_filename": "drive/MyDrive/accident/TWCCNet/data/nyc/road_adj.pkl",
-    "risk_adj_filename": "drive/MyDrive/accident/TWCCNet/data/nyc/risk_adj.pkl",
-    "poi_adj_filename": "drive/MyDrive/accident/TWCCNet/data/nyc/poi_adj.pkl",
-    "grid_node_filename": "drive/MyDrive/accident/TWCCNet/data/nyc/grid_node_map.pkl",
+    "all_data_filename": "data/nyc/all_data.pkl",
+    "mask_filename": "data/nyc/risk_mask.pkl",
+    "road_adj_filename": "data/nyc/road_adj.pkl",
+    "risk_adj_filename": "data/nyc/risk_adj.pkl",
+    "poi_adj_filename": "data/nyc/poi_adj.pkl",
+    "grid_node_filename": "data/nyc/grid_node_map.pkl",
     
     "recent_prior": 3,
     "week_prior": 4,
