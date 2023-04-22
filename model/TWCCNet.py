@@ -177,8 +177,6 @@ class STSemModule(nn.Module):
             {Tensor} -- shape：(batch_size,pre_len,north_south_map,west_east_map)
         """        
         batch_size,T,D1,N = graph_feature.shape
-        #print("feature: ",batch_size,T,D1,N)
-        #feature:  64 7 3 243
 
         road_graph_output = graph_feature.view(-1,D1,N).permute(0,2,1).contiguous()
         for gcn_layer in self.road_gcn:
@@ -205,47 +203,12 @@ class STSemModule(nn.Module):
             poi_graph_output = poi_graph_output.view(batch_size,-1,N).view(-1,N,batch_size)
             graph_output = graph_output + poi_graph_output
 
-
-        #print("size: ",risk_graph_output.view(batch_size).shape,road_graph_output.shape,poi_graph_output.shape)
-        #poi:  torch.Size([448, 243, 64])
-        #graph_output = self.road_conv(road_graph_output) + self.risk_conv(risk_graph_output) + self.poi_conv(poi_graph_output)
-        
-        # if road_graph_output.shape == (448,243,64):
-        #   road_graph_output = road_graph_output.view(64,1,448,243)
-        #   risk_graph_output = risk_graph_output.view(64,1,448,243)
-        #   poi_graph_output = poi_graph_output.view(64,1,448,243)
-
-        #   #road_weight = road_graph_output[0][0][0][0]
-        #   road_graph_output = self.road_conv(road_graph_output)
-        #   # road_weight = road_weight/road_graph_output[0][0][0][0]
-        #   # print("Road weight learned: ",road_weight)
-
-        #   # risk_weight = risk_graph_output[0][0][0][0]
-        #   risk_graph_output = self.risk_conv(risk_graph_output)
-        #   # risk_weight = risk_weight/risk_graph_output[0][0][0][0]
-        #   # print("Road weight learned: ",risk_weight)
-
-        #   # poi_weight = poi_graph_output[0][0][0][0]
-        #   poi_graph_output = self.poi_conv(poi_graph_output)
-        #   # poi_weight = poi_weight/poi_graph_output[0][0][0][0]
-        #   # print("Road weight learned: ",poi_weight)
-
-        #   road_graph_output = road_graph_output.view(64,448,243).view(448,243,64)
-        #   risk_graph_output = risk_graph_output.view(64,448,243).view(448,243,64)
-        #   poi_graph_output = poi_graph_output.view(64,448,243).view(448,243,64)
-
-
-        # graph_output = road_graph_output + risk_graph_output + poi_graph_output
         graph_output = graph_output.view(batch_size,T,N,-1)\
                                     .permute(0,2,1,3)\
                                     .contiguous()\
                                     .view(batch_size*N,T,-1)
 
-        #print("poi: ",poi_graph_output.shape)
-        #print("before: ",graph_output.shape)
-        #before:  torch.Size([15552, 7, 64])
         graph_output,_ = self.graph_gru(graph_output)
-        #print("after: ",graph_output.shape)
         
         graph_target_time = torch.unsqueeze(target_time_feature,1).repeat(1,N,1).view(batch_size*N,-1)
         graph_att_fc1_output = torch.squeeze(self.graph_att_fc1(graph_output))
